@@ -5,4 +5,7 @@ export default class DB {
   static fetch(data, callback) {
 
   }
+  static update(target, data, callback) {
+
+  }
 }

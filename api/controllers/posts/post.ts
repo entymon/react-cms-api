@@ -1,5 +1,8 @@
-const Post = require('../models/post');
-const auth = require('../middlewares/auth');
+import * as express from 'express';
+let router = express.Router();
+
+const Post = require('../../models/post');
+const auth = require('../../middlewares/auth');
 
 router.post('/', auth, function(req, res) {
   const user = req.user.id;

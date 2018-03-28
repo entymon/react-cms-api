@@ -1,8 +1,8 @@
 import * as express from 'express';
 let router = express.Router();
 
-const Post = require('../../models/post');
-const auth = require('../../middlewares/auth');
+import Post from '../../models/post';
+import auth from '../../middlewares/auth';
 
 router.post('/', auth, function(req, res) {
   const user = req.user.id;

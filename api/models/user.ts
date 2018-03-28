@@ -1,8 +1,9 @@
 import crypto from 'crypto-js';
-import DB from '../db';
+import DB from '../database/db';
 
 const hash = function(password) {
-  return crypto.createHash('sha1').update(password).digest('base64')
+  // TODO: add crypto JS
+  return password;
 };
 
 export default class User {
@@ -13,18 +14,20 @@ export default class User {
       email: email,
       password: hash(password),
     };
-    DB.save(user, callback)
+    DB.save('user', user, callback);
   }
 
   static get(id, callback) {
-    DB.fetch({id:id}, function(err, docs) {
+    DB.fetch('user', {id:id}, function(err, docs) {
       if (err) return callback(err);
       callback(null, docs[0])
     })
   }
 
   static authenticate(email, password, callback) {
-    DB.fetch({email:email}, function(err, docs) {
+    DB.fetch('user',{email:email}, function(err, docs) {
+      console.log(docs, 'qeqwe');
+      console.log(err, 'qeqwe');
       if (err) return callback(err);
       if (docs.length === 0) return callback();
 
@@ -38,7 +41,7 @@ export default class User {
   }
 
   static changePassword(id, password, callback) {
-    DB.update({id:id}, {password: hash(password)}, function(err, affected) {
+    DB.update('user', {id:id}, {password: hash(password)}, function(err, affected) {
       if (err) return callback(err);
       callback(null, affected > 0)
     })

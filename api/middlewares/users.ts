@@ -1,6 +1,7 @@
 import User from '../models/user';
 
 module.exports = function(req, res, next) {
+
   if (req.session && req.session.user) {
     User.get(req.session.user, function(err, user) {
       if (user) {

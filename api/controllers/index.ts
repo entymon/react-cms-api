@@ -8,19 +8,30 @@ router.use('/post', require('./posts/post'));
 router.use('/users', require('./users/user'));
 
 router.get('/', function(req, res) {
-  res.send('Hello World');
+  // res.send('Hello World');
 
   const postModel = new Post;
-  postModel.add({
-    author: {
-      firstName: 'Pawel',
-      lastName: 'Olejniczak'
-    },
-    title: 'Redis first steps',
-    description: 'Lorem ipsum dolor semit'
+  // postModel.add({
+  //   author: {
+  //     firstName: 'Pawel',
+  //     lastName: 'Olejniczak'
+  //   },
+  //   title: 'Redis first steps',
+  //   description: 'Lorem ipsum dolor semit'
+  // });
+  // postModel.add({
+  //   author: {
+  //     firstName: 'Tomasz',
+  //     lastName: 'Zaradko'
+  //   },
+  //   title: 'Redis first steps',
+  //   description: 'Lorem ipsum dolor semit'
+  // });
+
+  postModel.getAll().then(posts => {
+    res.send({posts: posts})
   });
 
-  postModel.getAll();
 
   // Post.all(function(err, posts) {
   //   res.render('index', {posts: posts})

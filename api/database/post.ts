@@ -14,10 +14,9 @@ export default class Post extends DB{
     this.storeName = 'posts';
   }
 
-  add(post): any {
-    DB.save(this.storeName, post, (err, replay) => {
-      console.log(replay, 'save');
-    });
+  async add(post) {
+    const uuid = await DB.save(this.storeName, post);
+    return uuid;
   }
 
   /**

@@ -16,11 +16,11 @@ client.on('connect', () => {
 export default class DB {
 
   /**
-   * Saves data for store as [store:uuid] and save key in keys store as [store]
+   * Saves single data object for store as [store:uuid] and save key in keys store as [store]
    *
    * For example:
-   *  single post: 'posts:45ca20bd-7d81-400c-a7c1-dd37d3c418aa' {Object Post},
-   *  single post: 'posts:fecaa164-a842-4a16-a1e8-6c8bf403eaf9'' {Object Post},
+   *  single post: '45ca20bd-7d81-400c-a7c1-dd37d3c418aa' {Object Post},
+   *  single post: 'fecaa164-a842-4a16-a1e8-6c8bf403eaf9' {Object Post},
    *
    *  Store of keys: 'posts [
    *     '45ca20bd-7d81-400c-a7c1-dd37d3c418aa',
@@ -28,11 +28,11 @@ export default class DB {
    *   ]
    *
    * @param store
-   * @param data [JSON]
-   * @param callback
+   * @param data - already saved data
    */
-  static save(store: string, data, callback) {
+  static save(store: string, data) {
     const keyName = uuid();
+    data.uuid = keyName;
     const flattenData = flatten(data, {
       safe: true
     });
@@ -42,15 +42,20 @@ export default class DB {
       return result.concat([fieldName, fieldData]);
     }, [keyName]);
 
-    client.hmsetAsync(hmData).then((response, errorHmset) => {
-      if (response) {
-        client.saddAsync([store, keyName]).then((replay, error) => {
-          (error) ? console.log(error, 'error [redis-sadd]') : '';
-        })
-      } else {
-        (errorHmset) ? console.log(errorHmset, 'error [redis-hmset]') : '';
+    return new Promise((resolve) => {
+      try {
+        client.hmsetAsync(hmData).then((response) => {
+          if (response) {
+            client.saddAsync([store, keyName]);
+            resolve(data);
+          }
+        });
+      } catch(error) {
+        console.log(error, 'save-record-error');
       }
     });
+
+
   }
 
   /**
@@ -58,7 +63,7 @@ export default class DB {
    * @param store
    * @returns {Bluebird}
    */
-  static fetchAll(store) {
+  static fetchAll(store: string) {
     return new Promise((resolve) => {
       client.smembersAsync(store).then((data) => {
         Promise.all(data.map((singleKey) => client.hgetallAsync(singleKey))).then((data) => {

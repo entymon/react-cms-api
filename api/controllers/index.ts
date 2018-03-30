@@ -19,18 +19,22 @@ router.get('/', function(req, res) {
   //   title: 'Redis first steps',
   //   description: 'Lorem ipsum dolor semit'
   // });
-  // postModel.add({
-  //   author: {
-  //     firstName: 'Tomasz',
-  //     lastName: 'Zaradko'
-  //   },
-  //   title: 'Redis first steps',
-  //   description: 'Lorem ipsum dolor semit'
-  // });
-
-  postModel.getAll().then(posts => {
-    res.send({posts: posts})
+  postModel.add({
+    author: {
+      firstName: 'Tomasz',
+      lastName: 'Zaradko'
+    },
+    title: 'Redis first steps',
+    description: 'Lorem ipsum dolor semit'
+  }).then(post => {
+    res.send({post: post})
   });
+
+
+
+  // postModel.getAll().then(posts => {
+  //   res.send({posts: posts})
+  // });
 
 
   // Post.all(function(err, posts) {

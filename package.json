@@ -9,7 +9,7 @@
     "start": "concurrently --kill-others --names \"tsc,node\" -c \"blue,green\" \"npx tsc --noEmit --pretty --watch\" \"npx nodemon api/server.ts --exec babel-node --extensions '.ts,.tsx' api/server.ts\"",
     "typecheck": "npx tsc --noEmit --pretty",
     "build": "npx tsc --noEmit --pretty && npx babel --extensions '.ts,.tsx' --source-maps --out-dir dist api",
-    "serve": "node --require source-map-support/register dist/api.js"
+    "serve": "node --require source-map-support/register dist/server.js"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta.42",

@@ -60,6 +60,7 @@ export default class DB {
 
   /**
    * Fetch all data from selected store
+   *
    * @param store
    * @returns {Bluebird}
    */
@@ -74,7 +75,23 @@ export default class DB {
     })
   }
 
-  static update(dbname, target, data, callback) {
+  /**
+   * Fetch data by uuid
+   *
+   * @param {string} store
+   * @param {string} uuid
+   * @returns {Bluebird}
+   */
+  static fetchByUuid(store: string, uuid: string) {
+    return new Promise(resolve => {
+      client.hgetallAsync(uuid).then(object => {
+        const unFlattenData = unflatten(object, { object: true });
+        resolve(unFlattenData);
+      })
+    })
+  }
+
+  static update(store: string, data) {
 
   }
 }

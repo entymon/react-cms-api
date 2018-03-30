@@ -11,6 +11,8 @@ router.get('/', function(req, res) {
   // res.send('Hello World');
 
   const postModel = new Post;
+
+  // ADD NEW POST
   // postModel.add({
   //   author: {
   //     firstName: 'Pawel',
@@ -19,22 +21,27 @@ router.get('/', function(req, res) {
   //   title: 'Redis first steps',
   //   description: 'Lorem ipsum dolor semit'
   // });
-  postModel.add({
-    author: {
-      firstName: 'Tomasz',
-      lastName: 'Zaradko'
-    },
-    title: 'Redis first steps',
-    description: 'Lorem ipsum dolor semit'
-  }).then(post => {
-    res.send({post: post})
-  });
+  // postModel.add({
+  //   author: {
+  //     firstName: 'Tomasz',
+  //     lastName: 'Zaradko'
+  //   },
+  //   title: 'Redis first steps',
+  //   description: 'Lorem ipsum dolor semit'
+  // }).then(post => {
+  //   res.send({post: post})
+  // });
 
 
 
+  // GET ALL POSTS
   // postModel.getAll().then(posts => {
   //   res.send({posts: posts})
   // });
+
+  postModel.getByUuid('de3b5b10-4878-426c-9276-036c5587afb5').then(post => {
+    res.send({posts: post})
+  })
 
 
   // Post.all(function(err, posts) {

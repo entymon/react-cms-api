@@ -14,9 +14,8 @@ export default class Post extends DB{
     this.storeName = 'posts';
   }
 
-  async add(post) {
-    const uuid = await DB.save(this.storeName, post);
-    return uuid;
+  add(post) {
+    return DB.save(this.storeName, post);
   }
 
   /**
@@ -25,5 +24,9 @@ export default class Post extends DB{
    */
   getAll() {
     return DB.fetchAll(this.storeName);
+  }
+
+  getByUuid(uuid) {
+    return DB.fetchByUuid(this.storeName, uuid)
   }
 }

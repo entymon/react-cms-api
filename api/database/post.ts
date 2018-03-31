@@ -16,7 +16,7 @@ export default class Post extends DB{
   }
 
   create(post) {
-    return DB.save(this.storeName, post);
+    return this.db.save(this.storeName, post);
   }
 
   /**
@@ -24,15 +24,15 @@ export default class Post extends DB{
    * @returns {Bluebird}
    */
   getAll() {
-    return DB.fetchAll(this.storeName);
+    return this.db.fetchAll(this.storeName);
   }
 
   getByUuid(uuid) {
-    return DB.fetchByUuid(this.storeName, uuid)
+    return this.db.fetchByUuid(this.storeName, uuid)
   }
 
   update(post) {
-    return DB.update(this.storeName, post);
+    return this.db.update(this.storeName, post);
   }
 
   delete(uuid: string) {

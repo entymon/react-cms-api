@@ -30,10 +30,38 @@ export default class DB {
    * @param store
    * @param data - already saved data
    */
-  static save(store: string, data) {
+  save(store: string, data) {
     const uniqueID = uuid();
-    const keyName = `${store}:${uniqueID}`;
-    data.uuid = uniqueID;
+    return this.addToStore(store, uniqueID, data);
+    // const keyName = `${store}:${uniqueID}`;
+    // data.uuid = uniqueID;
+    // data.store = store;
+    // const flattenData = flatten(data, {
+    //   safe: true
+    // });
+    //
+    // const hmData = Object.keys(flattenData).reduce((result: any, fieldName: any) => {
+    //   let fieldData = flattenData[fieldName];
+    //   return result.concat([fieldName, fieldData]);
+    // }, [keyName]);
+    //
+    // return new Promise((resolve) => {
+    //   try {
+    //     client.hmsetAsync(hmData).then((response) => {
+    //       if (response) {
+    //         client.saddAsync([store, keyName]);
+    //         resolve(data);
+    //       }
+    //     });
+    //   } catch(error) {
+    //     console.log(error, 'save-record-error');
+    //   }
+    // });
+  }
+
+  private async addToStore(store: string, uuid: string, data: any) {
+    const keyName = `${store}:${uuid}`;
+    data.uuid = uuid;
     data.store = store;
     const flattenData = flatten(data, {
       safe: true
@@ -44,19 +72,20 @@ export default class DB {
       return result.concat([fieldName, fieldData]);
     }, [keyName]);
 
-    return new Promise((resolve) => {
-      try {
-        client.hmsetAsync(hmData).then((response) => {
-          if (response) {
-            client.saddAsync([store, keyName]);
-            resolve(data);
-          }
-        });
-      } catch(error) {
-        console.log(error, 'save-record-error');
+    try {
+      const dataAdded = await client.hmsetAsync(hmData);
+      if (dataAdded) {
+        const keyStoreAdded = await client.saddAsync([store, keyName]);
+        if (keyStoreAdded) {
+          return new Promise.resolve(data);
+        }
       }
-    });
+    } catch(e) {
+      console.log(e, 'there was an error');
+    }
+  }
 
+  private removeFromStore() {
 
   }
 
@@ -66,7 +95,7 @@ export default class DB {
    * @param store
    * @returns {Bluebird}
    */
-  static fetchAll(store: string) {
+  fetchAll(store: string) {
     return new Promise((resolve) => {
       client.smembersAsync(store).then((data) => {
         Promise.all(data.map((singleKey) => client.hgetallAsync(singleKey))).then((data) => {
@@ -84,7 +113,7 @@ export default class DB {
    * @param {string} uuid
    * @returns {Bluebird}
    */
-  static fetchByUuid(store: string, uuid: string) {
+  fetchByUuid(store: string, uuid: string) {
     const keyName = `${store}:${uuid}`;
     console.log(keyName);
     return new Promise(resolve => {
@@ -95,8 +124,16 @@ export default class DB {
     })
   }
 
-  static update(store: string, data: any) {
-    const keyName = `${store}:${uuid}`;
+  async update(store: string, data: any) {
+    // console.log(data, 'dasda');
+    // const keyName = `${store}:${data.uuid}`;
+    // const dataExist = await client.existsAsync(keyName);
+    // if (dataExist) {
+    //   const dataRemoved = await client.delAsync(keyName);
+    //   if (dataRemoved) {
+    //
+    //   }
+    // }
   }
 
   /**

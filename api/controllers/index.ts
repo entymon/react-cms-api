@@ -23,7 +23,7 @@ router.get('/', function(req, res) {
   // });
   // postModel.create({
   //   author: {
-  //     firstName: 'Tomasz011ac',
+  //     firstName: 'Bogdan 122-oman',
   //     lastName: 'Zaradko'
   //   },
   //   title: 'Redis first steps',
@@ -36,9 +36,9 @@ router.get('/', function(req, res) {
 
 
   // GET ALL POSTS
-  // postModel.getAll().then(posts => {
-  //   res.send({posts: posts})
-  // });
+  postModel.getAll().then(posts => {
+    res.send({posts: posts})
+  });
 
 
 
@@ -51,7 +51,8 @@ router.get('/', function(req, res) {
 
   // UPDATE POST
   // postModel.update({
-  //   uuid: 'posts:37253f4d-a845-4bb4-b170-4758a6f06005',
+  //   uuid: '173a92b4-86eb-46d3-b4bd-429c75703909',
+  //   store: 'posts',
   //   author: {
   //     firstName: 'PawelXXX',
   //     lastName: 'Olejniczak'
@@ -59,9 +60,11 @@ router.get('/', function(req, res) {
   //   title: 'Redis first steps',
   //   description: 'Lorem ipsum dolor semit'
   // });
+  //
+  // res.send({post: 'done'});
 
 
-  
+
   // DELETE POST
   // postModel.delete('abef812d-0007-4658-98ca-2f826c9b3254').then(post => {
   //   (post) ? res.send({success: 'removed'}) : res.send({error: 'error'});

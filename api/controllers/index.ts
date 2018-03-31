@@ -13,7 +13,7 @@ router.get('/', function(req, res) {
   const postModel = new Post;
 
   // ADD NEW POST
-  // postModel.add({
+  // postModel.create({
   //   author: {
   //     firstName: 'Pawel',
   //     lastName: 'Olejniczak'
@@ -21,9 +21,9 @@ router.get('/', function(req, res) {
   //   title: 'Redis first steps',
   //   description: 'Lorem ipsum dolor semit'
   // });
-  // postModel.add({
+  // postModel.create({
   //   author: {
-  //     firstName: 'Tomasz',
+  //     firstName: 'Tomasz011ac',
   //     lastName: 'Zaradko'
   //   },
   //   title: 'Redis first steps',
@@ -34,19 +34,39 @@ router.get('/', function(req, res) {
 
 
 
+
   // GET ALL POSTS
   // postModel.getAll().then(posts => {
   //   res.send({posts: posts})
   // });
 
-  postModel.getByUuid('de3b5b10-4878-426c-9276-036c5587afb5').then(post => {
-    res.send({posts: post})
-  })
 
 
-  // Post.all(function(err, posts) {
-  //   res.render('index', {posts: posts})
-  // })
+  // GET POST BY UUID
+  // postModel.getByUuid('6853dc87-4f4b-4afd-b054-1deeb8c146b5').then(post => {
+  //   res.send({post: post})
+  // });
+
+
+
+  // UPDATE POST
+  // postModel.update({
+  //   uuid: 'posts:37253f4d-a845-4bb4-b170-4758a6f06005',
+  //   author: {
+  //     firstName: 'PawelXXX',
+  //     lastName: 'Olejniczak'
+  //   },
+  //   title: 'Redis first steps',
+  //   description: 'Lorem ipsum dolor semit'
+  // });
+
+
+  
+  // DELETE POST
+  // postModel.delete('abef812d-0007-4658-98ca-2f826c9b3254').then(post => {
+  //   (post) ? res.send({success: 'removed'}) : res.send({error: 'error'});
+  // });
+
 });
 
 router.post('/login', (req, res, next) =>{

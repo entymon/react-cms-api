@@ -11,10 +11,11 @@ export default class Post extends DB{
 
   constructor() {
     super();
+    this.db = new DB();
     this.storeName = 'posts';
   }
 
-  add(post) {
+  create(post) {
     return DB.save(this.storeName, post);
   }
 
@@ -28,5 +29,13 @@ export default class Post extends DB{
 
   getByUuid(uuid) {
     return DB.fetchByUuid(this.storeName, uuid)
+  }
+
+  update(post) {
+    return DB.update(this.storeName, post);
+  }
+
+  delete(uuid: string) {
+    return this.db.delete(this.storeName, uuid);
   }
 }

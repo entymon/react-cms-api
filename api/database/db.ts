@@ -19,20 +19,22 @@ export default class DB {
    * Saves single data object for store as [store:uuid] and save key in keys store as [store]
    *
    * For example:
-   *  single post: '45ca20bd-7d81-400c-a7c1-dd37d3c418aa' {Object Post},
-   *  single post: 'fecaa164-a842-4a16-a1e8-6c8bf403eaf9' {Object Post},
+   *  single post: 'posts:45ca20bd-7d81-400c-a7c1-dd37d3c418aa' {Object Post},
+   *  single post: 'posts:fecaa164-a842-4a16-a1e8-6c8bf403eaf9' {Object Post},
    *
    *  Store of keys: 'posts [
-   *     '45ca20bd-7d81-400c-a7c1-dd37d3c418aa',
-   *     'fecaa164-a842-4a16-a1e8-6c8bf403eaf9'
+   *     'posts:45ca20bd-7d81-400c-a7c1-dd37d3c418aa',
+   *     'posts:fecaa164-a842-4a16-a1e8-6c8bf403eaf9'
    *   ]
    *
    * @param store
    * @param data - already saved data
    */
   static save(store: string, data) {
-    const keyName = uuid();
-    data.uuid = keyName;
+    const uniqueID = uuid();
+    const keyName = `${store}:${uniqueID}`;
+    data.uuid = uniqueID;
+    data.store = store;
     const flattenData = flatten(data, {
       safe: true
     });
@@ -83,15 +85,38 @@ export default class DB {
    * @returns {Bluebird}
    */
   static fetchByUuid(store: string, uuid: string) {
+    const keyName = `${store}:${uuid}`;
+    console.log(keyName);
     return new Promise(resolve => {
-      client.hgetallAsync(uuid).then(object => {
+      client.hgetallAsync(keyName).then(object => {
         const unFlattenData = unflatten(object, { object: true });
         resolve(unFlattenData);
       })
     })
   }
 
-  static update(store: string, data) {
+  static update(store: string, data: any) {
+    const keyName = `${store}:${uuid}`;
+  }
 
+  /**
+   * Removes data from store and key from keyStore
+   * @param {string} store
+   * @param {string} uuid
+   * @returns {Promise<any>}
+   */
+  async delete(store: string, uuid: string) {
+    const keyName = `${store}:${uuid}`;
+    try {
+      const dataExist = await client.existsAsync(keyName);
+      if (dataExist) {
+        const dataRemoved = await client.delAsync(keyName);
+        if (dataRemoved) {
+          return await client.sremAsync(store, keyName);
+        }
+      }
+    } catch(error) {
+      console.log(error, 'delete-redis-error');
+    }
   }
 }

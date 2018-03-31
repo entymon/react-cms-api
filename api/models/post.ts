@@ -1,29 +1,41 @@
-import DB from '../database/db';
+import DB from "./db";
 
-export default class Post {
+export default class Post extends DB{
 
-  static create(user, text, callback) {
-    const post = {
-      user: user,
-      text: text,
-      date: new Date().toString()
-    };
+  /**
+   * ~ to table name
+   */
+  public storeName: string;
 
-    DB.save(post, callback);
+  public db: any;
+
+  constructor() {
+    super();
+    this.db = new DB();
+    this.storeName = 'posts';
   }
 
-  static get(id, callback) {
-    return DB.fetch({id:id}, function(err, docs) {
-      if (err) return callback(err);
-      callback(null, docs[0])
-    })
+  create(post) {
+    return this.db.save(this.storeName, post);
   }
 
-  static all(callback) {
-    return DB.fetch({}, callback);
+  /**
+   * Returns promise with all data
+   * @returns {Bluebird}
+   */
+  getAll() {
+    return this.db.fetchAll(this.storeName);
   }
 
-  static allByUser(user, callback) {
-    return DB.fetch({user: user}, callback);
+  getByUuid(uuid) {
+    return this.db.fetchByUuid(this.storeName, uuid)
+  }
+
+  update(post) {
+    return this.db.update(this.storeName, post);
+  }
+
+  delete(uuid: string) {
+    return this.db.delete(this.storeName, uuid);
   }
 }

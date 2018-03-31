@@ -1,14 +1,13 @@
 import * as express from 'express';
 let router = express.Router();
-// import Post from '../models/post';
+import Post from '../models/post';
 import User from "../models/user";
-import Post from "../database/post";
 
-router.use('/post', require('./posts/post'));
-router.use('/users', require('./users/user'));
+router.use('/posts', require('./posts/post'));
+// router.use('/users', require('./users/user'));
 
 router.get('/', function(req, res) {
-  // res.send('Hello World');
+  res.send('Hello World');
 
   const postModel = new Post;
 
@@ -28,20 +27,6 @@ router.get('/', function(req, res) {
   //     body: post
   //   })
   // });
-
-
-
-
-  // GET ALL POSTS
-
-  postModel.getAll().then(posts => {
-    res.send({
-      status: 'success',
-      message: '',
-      body: posts
-    })
-  });
-
 
 
   // GET POST BY UUID
@@ -95,24 +80,24 @@ router.get('/', function(req, res) {
 
 });
 
-router.post('/login', (req, res, next) =>{
-
-  console.log(req.body);
-  if (req.body.email && req.body.password) {
-    User.authenticate(req.body.email, req.body.password, function (error, user){
-      if (error || !user) {
-        return next(error);
-      } else {
-        req.session.userId = user._id;
-        console.log(req.session.userId);
-        return res.redirect('/profile');
-      }
-    })
-  }else{
-    const error = new Error("Not All Fields Filled Out.");
-    error.status =  401;
-    next(error);
-  }
-});
+// router.post('/login', (req, res, next) =>{
+//
+//   console.log(req.body);
+//   if (req.body.email && req.body.password) {
+//     User.authenticate(req.body.email, req.body.password, function (error, user){
+//       if (error || !user) {
+//         return next(error);
+//       } else {
+//         req.session.userId = user._id;
+//         console.log(req.session.userId);
+//         return res.redirect('/profile');
+//       }
+//     })
+//   }else{
+//     const error = new Error("Not All Fields Filled Out.");
+//     error.status =  401;
+//     next(error);
+//   }
+// });
 
 module.exports = router;

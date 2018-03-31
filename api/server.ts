@@ -1,13 +1,19 @@
 const express = require('express');
 const app = express();
 const session = require('express-session');
-const bodyParser = require('body-parser');
+let bodyParser = require('body-parser');
+
+express.json();
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // parse application/json
-app.use(bodyParser.json({ extended: true }));
+app.use(bodyParser.json({
+  extended: true,
+  inflate: false,
+  type: 'application/json'
+}));
 
 app.use(session({
   secret: 'keyboard cat',

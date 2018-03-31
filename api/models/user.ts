@@ -1,5 +1,5 @@
 import crypto from 'crypto-js';
-import DB from '../database/db';
+import DB from './db';
 
 const hash = function(password) {
   // TODO: add crypto JS

@@ -13,14 +13,7 @@ router.get('/', function(req, res) {
   const postModel = new Post;
 
   // ADD NEW POST
-  // postModel.create({
-  //   author: {
-  //     firstName: 'Pawel',
-  //     lastName: 'Olejniczak'
-  //   },
-  //   title: 'Redis first steps',
-  //   description: 'Lorem ipsum dolor semit'
-  // });
+
   // postModel.create({
   //   author: {
   //     firstName: 'Bogdan 122-oman',
@@ -29,27 +22,43 @@ router.get('/', function(req, res) {
   //   title: 'Redis first steps',
   //   description: 'Lorem ipsum dolor semit'
   // }).then(post => {
-  //   res.send({post: post})
+  //   res.send({
+  //     status: 'success',
+  //     message: 'post was added',
+  //     body: post
+  //   })
   // });
 
 
 
 
   // GET ALL POSTS
+
   postModel.getAll().then(posts => {
-    res.send({posts: posts})
+    res.send({
+      status: 'success',
+      message: '',
+      body: posts
+    })
   });
 
 
 
   // GET POST BY UUID
+
   // postModel.getByUuid('6853dc87-4f4b-4afd-b054-1deeb8c146b5').then(post => {
-  //   res.send({post: post})
+  //   res.send({
+  //     status: 'success',
+  //     message: '',
+  //     body: post
+  //   })
   // });
 
 
 
+
   // UPDATE POST
+
   // postModel.update({
   //   uuid: '173a92b4-86eb-46d3-b4bd-429c75703909',
   //   store: 'posts',
@@ -59,15 +68,29 @@ router.get('/', function(req, res) {
   //   },
   //   title: 'Redis first steps',
   //   description: 'Lorem ipsum dolor semit'
+  // }).then(post => {
+  //   res.send({
+  //     status: 'success',
+  //     message: 'post was updated',
+  //     body: post
+  //   });
   // });
-  //
-  // res.send({post: 'done'});
+
 
 
 
   // DELETE POST
+
   // postModel.delete('abef812d-0007-4658-98ca-2f826c9b3254').then(post => {
-  //   (post) ? res.send({success: 'removed'}) : res.send({error: 'error'});
+  //   (post) ? res.send({
+  //     status: 'success',
+  //     message: 'post was removed',
+  //     body: post
+  //   }) : res.send({
+  //     status: 'error',
+  //     message: '',
+  //     body: ''
+  //   });
   // });
 
 });

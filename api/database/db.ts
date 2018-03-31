@@ -1,13 +1,13 @@
 const redis = require('redis');
-const Promise = require('bluebird');
-const unflatten = require('flat').unflatten
+const PromiseDB = require('bluebird');
+const unflatten = require('flat').unflatten;
 import uuid from 'uuid/v4';
 import flatten  from 'flat';
 
 
 const client = redis.createClient();
-Promise.promisifyAll(redis.RedisClient.prototype);
-Promise.promisifyAll(redis.Multi.prototype);
+PromiseDB.promisifyAll(redis.RedisClient.prototype);
+PromiseDB.promisifyAll(redis.Multi.prototype);
 
 client.on('connect', () => {
   console.log('connected');
@@ -33,30 +33,6 @@ export default class DB {
   save(store: string, data) {
     const uniqueID = uuid();
     return this.addToStore(store, uniqueID, data);
-    // const keyName = `${store}:${uniqueID}`;
-    // data.uuid = uniqueID;
-    // data.store = store;
-    // const flattenData = flatten(data, {
-    //   safe: true
-    // });
-    //
-    // const hmData = Object.keys(flattenData).reduce((result: any, fieldName: any) => {
-    //   let fieldData = flattenData[fieldName];
-    //   return result.concat([fieldName, fieldData]);
-    // }, [keyName]);
-    //
-    // return new Promise((resolve) => {
-    //   try {
-    //     client.hmsetAsync(hmData).then((response) => {
-    //       if (response) {
-    //         client.saddAsync([store, keyName]);
-    //         resolve(data);
-    //       }
-    //     });
-    //   } catch(error) {
-    //     console.log(error, 'save-record-error');
-    //   }
-    // });
   }
 
   private async addToStore(store: string, uuid: string, data: any) {
@@ -77,16 +53,12 @@ export default class DB {
       if (dataAdded) {
         const keyStoreAdded = await client.saddAsync([store, keyName]);
         if (keyStoreAdded) {
-          return new Promise.resolve(data);
+          return new PromiseDB.resolve(data);
         }
       }
     } catch(e) {
       console.log(e, 'there was an error');
     }
-  }
-
-  private removeFromStore() {
-
   }
 
   /**
@@ -96,9 +68,9 @@ export default class DB {
    * @returns {Bluebird}
    */
   fetchAll(store: string) {
-    return new Promise((resolve) => {
+    return new PromiseDB((resolve) => {
       client.smembersAsync(store).then((data) => {
-        Promise.all(data.map((singleKey) => client.hgetallAsync(singleKey))).then((data) => {
+        PromiseDB.all(data.map((singleKey) => client.hgetallAsync(singleKey))).then((data) => {
           const unFlattenData = data.map((object) => unflatten(object, { object: true }));
           resolve(unFlattenData);
         });
@@ -116,7 +88,7 @@ export default class DB {
   fetchByUuid(store: string, uuid: string) {
     const keyName = `${store}:${uuid}`;
     console.log(keyName);
-    return new Promise(resolve => {
+    return new PromiseDB(resolve => {
       client.hgetallAsync(keyName).then(object => {
         const unFlattenData = unflatten(object, { object: true });
         resolve(unFlattenData);
@@ -124,16 +96,21 @@ export default class DB {
     })
   }
 
+  /**
+   * Updates record in store (replace old by new)
+   * @param {string} store
+   * @param data
+   * @returns {Promise<Bluebird.resolve>}
+   */
   async update(store: string, data: any) {
-    // console.log(data, 'dasda');
-    // const keyName = `${store}:${data.uuid}`;
-    // const dataExist = await client.existsAsync(keyName);
-    // if (dataExist) {
-    //   const dataRemoved = await client.delAsync(keyName);
-    //   if (dataRemoved) {
-    //
-    //   }
-    // }
+    const keyName = `${store}:${data.uuid}`;
+    const dataExist = await client.existsAsync(keyName);
+    if (dataExist) {
+      const dataRemoved = await client.delAsync(keyName);
+      if (dataRemoved) {
+        return this.addToStore(store, data.uuid, data);
+      }
+    }
   }
 
   /**

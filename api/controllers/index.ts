@@ -1,6 +1,6 @@
 import * as express from 'express';
-const passport = require("passport");
-import passportJWT from "passport-jwt";
+import passport from 'passport';
+import passportJWT from 'passport-jwt';
 import jwt from 'jsonwebtoken';
 import _ from "lodash";
 let router = express.Router();

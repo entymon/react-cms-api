@@ -1,10 +1,17 @@
 import * as express from 'express';
-import User from '../../models/user'
-import auth from "../../middlewares/auth";
+import User from '../../models/user';
+
 const router = express.Router();
 
-router.get('/', auth, function(req, res) {
-  // get users with middleware auth function
+router.get('/', function(req, res) {
+  const userModel = new User;
+  userModel.getAll().then(users => {
+    res.json({
+      status: 'success',
+      message: '',
+      body: users
+    })
+  });
 });
 
 module.exports = router;

@@ -71,8 +71,20 @@ export default class DB {
    * @returns {Bluebird}
    */
   fetchAll(store: string) {
+
+
+    console.log(store);
+
     return new PromiseDB((resolve) => {
       client.smembersAsync(store).then((data) => {
+
+        data.map((singleKey) => {
+          console.log(singleKey);
+          client.hgetallAsync('users:uuid').then(x => {
+            console.log(x);
+          })
+        });
+
         PromiseDB.all(data.map((singleKey) => client.hgetallAsync(singleKey))).then((data) => {
           const unFlattenData = data.map((object) => unflatten(object, { object: true }));
           resolve(unFlattenData);

@@ -1,29 +1,15 @@
 const express = require('express');
 const app = express();
-const session = require('express-session');
-let bodyParser = require('body-parser');
+const cors = require('cors');
+require('dotenv').config();
+
+if (!process.env.AUTH0_DOMAIN || !process.env.AUTH0_AUDIENCE) {
+  throw 'Make sure you have AUTH0_DOMAIN, and AUTH0_AUDIENCE in your .env file';
+}
 
 express.json();
 
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// parse application/json
-app.use(bodyParser.json({
-  extended: true,
-  inflate: false,
-  type: 'application/json'
-}));
-
-app.use(session({
-  secret: 'keyboard cat',
-  cookie: {
-    user: {
-      id: 1,
-      email: 'pawel@cms.com'
-    }
-  }
-}));
+app.use(cors());
 
 app.use(express.static(__dirname + '/public'));
 app.use(require('./middlewares/users'));

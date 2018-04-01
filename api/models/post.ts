@@ -1,4 +1,4 @@
-import DB from "./db";
+import DB from "./crud";
 
 export default class Post extends DB{
 

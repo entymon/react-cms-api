@@ -13,6 +13,9 @@ client.on('connect', () => {
   console.log('connected');
 });
 
+/**
+ * TODO: export file as a npm library CRUD for Redis
+ */
 export default class DB {
 
   /**

@@ -8,7 +8,7 @@ import bodyJson from "../../middlewares/bodyJson";
 router.get('/', function(req, res) {
   const postModel = new Post;
   postModel.getAll().then(posts => {
-    res.send({
+    res.json({
       status: 'success',
       message: '',
       body: posts
@@ -19,7 +19,7 @@ router.get('/', function(req, res) {
 router.get('/:uuid', function(req, res) {
   const postModel = new Post;
   postModel.getByUuid(req.params.uuid).then(post => {
-    res.send({
+    res.json({
       status: 'success',
       message: '',
       body: post
@@ -35,7 +35,7 @@ router.post('/', bodyJson, (req, res) => {
 
   console.log(req.body.json, 'test');
   postModel.create(req.body.json).then(post => {
-    res.send({
+    res.json({
       status: 'success',
       message: 'post was added',
       body: post
@@ -49,7 +49,7 @@ router.post('/', bodyJson, (req, res) => {
 router.put('/', bodyJson, function(req, res) {
   const postModel = new Post;
   postModel.update(req.body.json).then(post => {
-    res.send({
+    res.json({
       status: 'success',
       message: 'post was updated',
       body: post
@@ -60,11 +60,11 @@ router.put('/', bodyJson, function(req, res) {
 router.delete('/:uuid', function(req, res) {
   const postModel = new Post;
   postModel.delete(req.params.uuid).then(success => {
-    (success) ? res.send({
+    (success) ? res.json({
       status: 'success',
       message: 'post was removed',
       body: success
-    }) : res.send({
+    }) : res.json({
       status: 'error',
       message: '',
       body: ''

@@ -102,7 +102,7 @@ export default class DB {
   /**
    * Updates record in store (replace old by new)
    * @param {string} store
-   * @param data
+   * @param {any} data
    * @returns {Promise<Bluebird.resolve>}
    */
   async update(store: string, data: any) {

@@ -48,7 +48,7 @@ router.post('/', bodyJson, (req, res) => {
  */
 router.put('/', bodyJson, function(req, res) {
   const postModel = new Post;
-  postModel.update(req.body.json).then(post => {
+  postModel.edit(req.body.json).then(post => {
     res.json({
       status: 'success',
       message: 'post was updated',
@@ -59,7 +59,7 @@ router.put('/', bodyJson, function(req, res) {
 
 router.delete('/:uuid', function(req, res) {
   const postModel = new Post;
-  postModel.delete(req.params.uuid).then(success => {
+  postModel.remove(req.params.uuid).then(success => {
     (success) ? res.json({
       status: 'success',
       message: 'post was removed',

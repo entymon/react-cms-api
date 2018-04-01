@@ -70,14 +70,6 @@ router.post('/login', (req, res, next) =>{
   }
 });
 
-router.get("/secretDebug",
-  function(req, res, next){
-    console.log(req.get('Authorization'));
-    next();
-  }, function(req, res){
-    res.json("debugging");
-  });
-
 router.get("/secret", passport.authenticate('jwt', { session: false }), function(req, res){
   res.json("Success! You can not see this without a token");
 });

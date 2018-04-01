@@ -1,21 +1,50 @@
 import DB from './crud';
 
-export default class User {
+export interface IUserModelBase {
+  name: string;
+  password: string;
+}
 
-  static create(name, email, password, callback) {
+export interface IUserModel extends IUserModelBase {
+  uuid: string;
+}
 
+export default class User extends DB {
+
+  /**
+   * ~ to table name
+   */
+  public storeName: string;
+
+  constructor() {
+    super();
+    this.storeName = 'users';
   }
 
-  static get(id, callback) {
-
+  create(user: IUserModelBase) {
+    // TODO: add field validation
+    return this.save(this.storeName, user);
   }
-  //
-  // static authenticate(email, password, callback) {
-  //
-  // }
 
-  static changePassword(id, password, callback) {
+  /**
+   * Returns promise with all data
+   * @returns {Bluebird}
+   */
+  getAll() {
+    return this.fetchAll(this.storeName);
+  }
 
+  getByUuid(uuid) {
+    return this.fetchByUuid(this.storeName, uuid)
+  }
+
+  edit(user: IUserModel): any {
+    // TODO: add field validation
+    return this.update(this.storeName, user);
+  }
+
+  remove(uuid: string) {
+    return this.delete(this.storeName, uuid);
   }
 }
 

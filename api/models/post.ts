@@ -7,16 +7,14 @@ export default class Post extends DB{
    */
   public storeName: string;
 
-  public db: any;
-
   constructor() {
     super();
-    this.db = new DB();
     this.storeName = 'posts';
   }
 
   create(post) {
-    return this.db.save(this.storeName, post);
+    // TODO: add field validation
+    return this.save(this.storeName, post);
   }
 
   /**
@@ -24,18 +22,19 @@ export default class Post extends DB{
    * @returns {Bluebird}
    */
   getAll() {
-    return this.db.fetchAll(this.storeName);
+    return this.fetchAll(this.storeName);
   }
 
   getByUuid(uuid) {
-    return this.db.fetchByUuid(this.storeName, uuid)
+    return this.fetchByUuid(this.storeName, uuid)
   }
 
-  update(post) {
-    return this.db.update(this.storeName, post);
+  edit(post) {
+    // TODO: add field validation
+    return this.update(this.storeName, post);
   }
 
-  delete(uuid: string) {
-    return this.db.delete(this.storeName, uuid);
+  remove(uuid: string) {
+    return this.delete(this.storeName, uuid);
   }
 }

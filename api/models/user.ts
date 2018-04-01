@@ -9,10 +9,10 @@ export default class User {
   static get(id, callback) {
 
   }
-
-  static authenticate(email, password, callback) {
-
-  }
+  //
+  // static authenticate(email, password, callback) {
+  //
+  // }
 
   static changePassword(id, password, callback) {
 

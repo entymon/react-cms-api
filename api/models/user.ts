@@ -3,6 +3,7 @@ import DB from './crud';
 export interface IUserModelBase {
   name: string;
   password: string;
+  permission: boolean;
 }
 
 export interface IUserModel extends IUserModelBase {
@@ -22,7 +23,6 @@ export default class User extends DB {
   }
 
   create(user: IUserModelBase) {
-    // TODO: add field validation
     return this.save(this.storeName, user);
   }
 
@@ -39,7 +39,6 @@ export default class User extends DB {
   }
 
   edit(user: IUserModel): any {
-    // TODO: add field validation
     return this.update(this.storeName, user);
   }
 

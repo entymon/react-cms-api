@@ -22,6 +22,15 @@ app.use(express.static(__dirname + '/public'));
 app.use(require('./controllers'));
 
 
+
+app.all('*', function(req, res){
+  console.log('tewer');
+  res.json({
+    status: 'error',
+    message: `route does not exist ${req.originalUrl}`
+  }, 404);
+});
+
 app.listen(4000, function() {
   console.log('Listening on port 4000...')
 });

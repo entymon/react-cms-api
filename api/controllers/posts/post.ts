@@ -32,8 +32,6 @@ router.get('/:uuid', function(req, res) {
  */
 router.post('/', bodyJson, (req, res) => {
   const postModel = new Post;
-
-  console.log(req.body.json, 'test');
   postModel.create(req.body.json).then(post => {
     res.json({
       status: 'success',

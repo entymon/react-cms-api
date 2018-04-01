@@ -26,7 +26,11 @@
 
 go to redis DB directory on your computer and RUN:
 
-- `./src/redis-cli HMSET users:uuid uuid b0e73d1b-c3c1-41bc-b08d-4ec6da9b619b`
+```
+uuid - default UUID number
+```
+
+- `./src/redis-cli HMSET users:uuid uuid uuid`
 - `./src/redis-cli HMSET users:uuid name admin`
 - `./src/redis-cli HMSET users:uuid password admin`
 - `./src/redis-cli SADD users users:uuid`

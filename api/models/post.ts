@@ -1,6 +1,6 @@
-import DB from "./crud";
+import CRUD from "./crud";
 
-export default class Post extends DB{
+export default class Post extends CRUD {
 
   /**
    * ~ to table name

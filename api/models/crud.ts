@@ -16,7 +16,9 @@ client.on('connect', () => {
 /**
  * TODO: export file as a npm library CRUD for Redis
  */
-export default class DB {
+export default class CRUD {
+
+  client: any;
 
   /**
    * Saves single data object for store as [store:uuid] and save key in keys store as [store]
@@ -35,6 +37,7 @@ export default class DB {
    */
   save(store: string, data) {
     const uniqueID = uuid();
+    this.client = client;
     return this.addToStore(store, uniqueID, data);
   }
 

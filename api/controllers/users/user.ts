@@ -1,6 +1,5 @@
 import * as express from 'express';
 import User from '../../models/user';
-import Post from "../../models/post";
 import bodyJson from "../../middlewares/bodyJson";
 
 const router = express.Router();

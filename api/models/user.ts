@@ -1,4 +1,4 @@
-import DB from './crud';
+import CRUD from "./crud";
 
 export interface IUserModelBase {
   name: string;
@@ -10,7 +10,7 @@ export interface IUserModel extends IUserModelBase {
   uuid: string;
 }
 
-export default class User extends DB {
+export default class User extends CRUD {
 
   /**
    * ~ to table name
@@ -38,12 +38,11 @@ export default class User extends DB {
     return this.fetchByUuid(this.storeName, uuid)
   }
 
-  edit(user: IUserModel): any {
-    return this.update(this.storeName, user);
-  }
-
-  remove(uuid: string) {
-    return this.delete(this.storeName, uuid);
+  async getUserByName(name: string) {
+    // const phrase = `${this.storeName}:*`;
+    // const userKeys = await this.client.kyesAsync(phrase);
+    //
+    // console.log(userKeys, 'useKeys');
   }
 }
 

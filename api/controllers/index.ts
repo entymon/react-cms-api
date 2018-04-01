@@ -3,6 +3,7 @@ import passport from 'passport';
 import passportJWT from 'passport-jwt';
 import jwt from 'jsonwebtoken';
 import _ from "lodash";
+import User from "../models/user";
 let router = express.Router();
 
 const ExtractJwt = passportJWT.ExtractJwt;
@@ -37,7 +38,7 @@ const jwtOptions = {
 const strategy = new JwtStrategy(jwtOptions, function(jwt_payload, next) {
   console.log('payload received', jwt_payload);
   // usually this would be a database call:
-  const user = users[_.findIndex(users, {id: jwt_payload.id})];
+  const user = users[_.findIndex(users, {id: jwt_payload.uuid})];
   if (user) {
     next(null, user);
   } else {
@@ -49,12 +50,17 @@ passport.use(strategy);
 
 
 router.post('/login', (req, res, next) =>{
+
   let name = '';
   let password = '';
   if(req.body.name && req.body.password){
     name = req.body.name;
     password = req.body.password;
   }
+  //
+  // const userModel = new User();
+  // userModel.getUserByName('admin');
+
   // usually this would be a database call:
   const user = users[_.findIndex(users, {name: name})];
   if( ! user ){
@@ -62,7 +68,7 @@ router.post('/login', (req, res, next) =>{
   }
 
   if(user.password === password) {
-    const payload = {id: user.uuid};
+    const payload = {id: user.id};
     const token = jwt.sign(payload, jwtOptions.secretOrKey);
     res.json({message: "ok", token: token});
   } else {

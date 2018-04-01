@@ -1,6 +1,7 @@
 import * as express from 'express';
-const passport = require("passport");
+import passport from 'passport';
 import passportJWT from "passport-jwt";
+import User from '../models/user';
 import jwt from 'jsonwebtoken';
 import _ from "lodash";
 let router = express.Router();
@@ -31,22 +32,24 @@ const users = [
 
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('jwt'),
-  secretOrKey: 'tasmanianDevil'
+  secretOrKey: process.env.AUTH0_SECRET
 };
 
-const strategy = new JwtStrategy(jwtOptions, function(jwt_payload, next) {
-  console.log('payload received', jwt_payload);
-  // usually this would be a database call:
-  const user = users[_.findIndex(users, {id: jwt_payload.id})];
-  if (user) {
-    next(null, user);
-  } else {
-    next(null, false);
-  }
+const strategy = new JwtStrategy(jwtOptions, (jwt_payload, next) => {
+
+  const userModel = new User();
+  const userPromise = userModel.getByUuid(jwt_payload.uuid);
+
+  userPromise.then((user) => {
+    if (user) {
+      next(null, user);
+    } else {
+      next(null, false);
+    }
+  })
 });
 
 passport.use(strategy);
-
 
 router.post('/login', (req, res, next) =>{
   let name = '';
@@ -55,32 +58,35 @@ router.post('/login', (req, res, next) =>{
     name = req.body.name;
     password = req.body.password;
   }
-  // usually this would be a database call:
-  const user = users[_.findIndex(users, {name: name})];
-  if( ! user ){
-    res.status(401).json({message:"no such user found"});
-  }
 
-  if(user.password === password) {
-    const payload = {id: user.uuid};
-    const token = jwt.sign(payload, jwtOptions.secretOrKey);
-    res.json({message: "ok", token: token});
-  } else {
-    res.status(401).json({message:"passwords did not match"});
-  }
+  const userModel = new User();
+  const userPromise = userModel.getUserByName(name);
+
+  userPromise.then(user =>{
+    if( ! user ) {
+      res.status(401).json({message: "no such user found"});
+    }
+
+    if(user.password === password) {
+      const payload = {uuid: user.uuid};
+      const token = jwt.sign(payload, jwtOptions.secretOrKey);
+      res.json({message: "ok", token: token});
+    } else {
+      res.status(401).json({message:"passwords did not match"});
+    }
+  });
 });
 
 router.get("/secretDebug",
-  function(req, res, next){
+  (req, res, next) => {
     console.log(req.get('Authorization'));
     next();
-  }, function(req, res){
+  }, (req, res) => {
     res.json("debugging");
   });
 
-router.get("/secret", passport.authenticate('jwt', { session: false }), function(req, res){
+router.get("/secret", passport.authenticate('jwt', { session: false }), (req, res) => {
   res.json("Success! You can not see this without a token");
 });
-
 
 module.exports = router;

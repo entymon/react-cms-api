@@ -581,6 +581,16 @@
     "@types/express" "*"
     "@types/node" "*"
 
+"@types/core-js@0.9.36":
+  version "0.9.36"
+  resolved "https://registry.yarnpkg.com/@types/core-js/-/core-js-0.9.36.tgz#d721e7cc0007d10ce66ad263ebf478a4071c53f4"
+
+"@types/es6-promise@^3.3.0":
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/@types/es6-promise/-/es6-promise-3.3.0.tgz#61b55e554fd807b563f158a7986ee53d3a5a5a9d"
+  dependencies:
+    es6-promise "*"
+
 "@types/events@*":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@types/events/-/events-1.2.0.tgz#81a6731ce4df43619e5c8c945383b3e62a89ea86"
@@ -1243,6 +1253,10 @@ electron-to-chromium@^1.3.40:
 encodeurl@~1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/encodeurl/-/encodeurl-1.0.2.tgz#ad3ff4c86ec2d029322f5a02c3a9a606c95b3f59"
+
+es6-promise@*:
+  version "4.2.4"
+  resolved "https://registry.yarnpkg.com/es6-promise/-/es6-promise-4.2.4.tgz#dc4221c2b16518760bd8c39a52d8f356fc00ed29"
 
 escape-html@~1.0.3:
   version "1.0.3"

@@ -1,5 +1,5 @@
 const redis = require('redis');
-const PromiseDB = require('bluebird');
+import * as PromiseDB from 'bluebird';
 const unflatten = require('flat').unflatten;
 import uuid from 'uuid/v4';
 import flatten  from 'flat';
@@ -15,10 +15,15 @@ client.on('connect', () => {
 
 /**
  * TODO: export file as a npm library CRUD for Redis
+ * TODO2: add client.multi() ~ similar to MySQL transaction
  */
 export default class CRUD {
 
   client: any;
+
+  constructor() {
+    this.client = client;
+  }
 
   /**
    * Saves single data object for store as [store:uuid] and save key in keys store as [store]
@@ -37,7 +42,6 @@ export default class CRUD {
    */
   save(store: string, data) {
     const uniqueID = uuid();
-    this.client = client;
     return this.addToStore(store, uniqueID, data);
   }
 
@@ -59,7 +63,7 @@ export default class CRUD {
       if (dataAdded) {
         const keyStoreAdded = await client.saddAsync([store, keyName]);
         if (keyStoreAdded) {
-          return new PromiseDB.resolve(data);
+          return PromiseDB.resolve(data);
         }
       }
     } catch(e) {
@@ -73,10 +77,10 @@ export default class CRUD {
    * @param store
    * @returns {Bluebird}
    */
-  fetchAll(store: string) {
-    return new PromiseDB((resolve) => {
+  async fetchAll(store: string) {
+    return new Promise((resolve) => {
       client.smembersAsync(store).then((data) => {
-        PromiseDB.all(data.map((singleKey) => client.hgetallAsync(singleKey))).then((data) => {
+        Promise.all(data.map((singleKey) => client.hgetallAsync(singleKey))).then((data) => {
           const unFlattenData = data.map((object) => unflatten(object, { object: true }));
           resolve(unFlattenData);
         });
@@ -91,15 +95,10 @@ export default class CRUD {
    * @param {string} uuid
    * @returns {Bluebird}
    */
-  fetchByUuid(store: string, uuid: string) {
+  async fetchByUuid(store: string, uuid: string) {
     const keyName = `${store}:${uuid}`;
-    console.log(keyName);
-    return new PromiseDB(resolve => {
-      client.hgetallAsync(keyName).then(object => {
-        const unFlattenData = unflatten(object, { object: true });
-        resolve(unFlattenData);
-      })
-    })
+    const object = await client.hgetallAsync(keyName);
+    return unflatten(object, { object: true });
   }
 
   /**

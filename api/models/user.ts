@@ -1,4 +1,5 @@
 import CRUD from "./crud";
+import * as PromiseDB from 'bluebird';
 
 export interface IUserModelBase {
   name: string;
@@ -39,10 +40,16 @@ export default class User extends CRUD {
   }
 
   async getUserByName(name: string) {
-    // const phrase = `${this.storeName}:*`;
-    // const userKeys = await this.client.kyesAsync(phrase);
-    //
-    // console.log(userKeys, 'useKeys');
+    const userHashes = await this.client.keysAsync(`${this.storeName}:*`);
+    const userNames = await PromiseDB.all(userHashes.map(hash => this.client.hgetAsync(hash, 'name')));
+
+    let userUuid = '';
+    userNames.map((userName, index) => {
+      if (userName === name) {
+        userUuid = userHashes[index].replace(`${this.storeName}:`, '');
+      }
+    });
+    return this.fetchByUuid(this.storeName, userUuid)
   }
 }
 

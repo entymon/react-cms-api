@@ -1,5 +1,3 @@
-import User from "./models/user";
-
 require('dotenv').config();
 const express = require('express');
 const app = express();
@@ -21,7 +19,6 @@ app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
 app.use(require('./controllers'));
 
-
 app.all('*', function(req, res){
   res.json({
     status: 'error',
@@ -29,6 +26,6 @@ app.all('*', function(req, res){
   }, 404);
 });
 
-app.listen(4000, function() {
-  console.log('Listening on port 4000...')
+app.listen(4000, () => {
+  console.log('Listening on port 4000...');
 });

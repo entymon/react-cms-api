@@ -12,23 +12,19 @@ const JwtStrategy = passportJWT.Strategy;
 router.use('/posts', require('./posts/post'));
 router.use('/users', require('./users/user'));
 
-router.get('/', function(req, res) {
-  res.json({message: "Express is up!"});
+router.get('/test', (req, res) => {
+  res.json({message: "Express is up TEST!"});
 });
 
-// save in database
-const users = [
-  {
-    uuid: 1,
-    name: 'jonathanmh',
-    password: '%2yx4'
-  },
-  {
-    uuid: 2,
-    name: 'test',
-    password: 'test'
-  }
-];
+
+
+router.get('/', (req, res) => {
+  res.json({
+    message: 'test body',
+    body: req.body
+  });
+
+});
 
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('jwt'),

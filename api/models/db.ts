@@ -1,17 +1,24 @@
-const redis = require('redis');
+// const redis = require('redis');
+let mongoose = require('mongoose');
 import * as PromiseDB from 'bluebird';
 const unflatten = require('flat').unflatten;
 import uuid from 'uuid/v4';
 import flatten  from 'flat';
 
-
-const client = redis.createClient();
-PromiseDB.promisifyAll(redis.RedisClient.prototype);
-PromiseDB.promisifyAll(redis.Multi.prototype);
-
-client.on('connect', () => {
-  console.log('connected');
+mongoose.connect('mongodb://mongo/cmsapi')
+  .then(() => { // if all is ok we will be here
+    console.log('TEST mongo started')
+    // return server.start();
+  })
+  .catch(err => { // we will not be here...
+    console.error('App starting error:', err.stack);
+    process.exit(1);
+  });
+const cmsSchema = mongoose.Schema({
+  name: String
 });
+
+const Content = exports.Content = mongoose.model('Content', cmsSchema);
 
 /**
  * TODO: export file as a npm library CRUD for Redis

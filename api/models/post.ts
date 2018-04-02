@@ -1,4 +1,4 @@
-import CRUD from "./crud";
+import CRUD from "./db";
 
 export default class Post extends CRUD {
 

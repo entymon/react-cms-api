@@ -1,4 +1,4 @@
-import CRUD from "./crud";
+import CRUD from "./db";
 import * as PromiseDB from 'bluebird';
 
 export interface IUserModelBase {
